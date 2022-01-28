@@ -1,0 +1,9 @@
+#dependabot config for npm
+
+version: 2
+updates:
+  - directory: '/'
+    open-pull-requests-limit: 10
+    package-ecosystem: 'npm'
+    schedule:
+      interval: 'monthly'
