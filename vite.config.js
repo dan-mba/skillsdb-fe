@@ -15,9 +15,12 @@ export default defineConfig({
     outDir: './dist',
   },
   resolve: {
-    alias: {
-      './runtimeConfig': './runtimeConfig.browser',
-    },
+    alias: [
+      {
+        find: './runtimeConfig',
+        replacement: './runtimeConfig.browser',
+      },
+    ]
 },
   base: './'
 })

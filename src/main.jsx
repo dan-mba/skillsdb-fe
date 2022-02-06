@@ -1,10 +1,22 @@
-import React from 'react'
-import ReactDOM from 'react-dom'
-import App from './App'
+import {render} from 'react-dom';
+import {CssBaseline, ThemeProvider} from '@mui/material';
+import {AmplifyProvider} from '@aws-amplify/ui-react';
+import {Amplify} from 'aws-amplify';
 
-ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
+import {MuiTheme} from './theme';
+import {config} from './config';
+import App from './App';
+
+import '@aws-amplify/ui-react/styles.css';
+
+Amplify.configure(config);
+
+render(
+  <AmplifyProvider>
+    <CssBaseline />
+    <ThemeProvider theme={MuiTheme}>
+      <App />
+    </ThemeProvider>
+  </AmplifyProvider>,
   document.getElementById('root')
 )

@@ -8,7 +8,14 @@
   </head>
   <body>
     <div id="root"></div>
-    <script>window.global = window;</script>
+    <script>
+      window.global = window;
+      window.process = {
+        env: { DEBUG: undefined },
+      };
+      //window.LOG_LEVEL = 'DEBUG';
+      var exports = {};
+    </script>
     <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>
