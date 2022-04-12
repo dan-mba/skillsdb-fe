@@ -23,7 +23,7 @@ function App() {
   const [editOpen, setEditOpen] = useState('');
   const [deleteOpen, setDeleteOpen] = useState('');
 
-  useEffect(async () => {
+  useEffect(() => {
     Hub.listen('auth', ({ payload: { event, data } }) => {
       switch (event) {
         case 'signIn':
@@ -44,13 +44,16 @@ function App() {
                   break;
                 }
               });
-              
-    getUser()
-      .then(userData => {
-        setUser(userData);
-        setUsername(userData.signInUserSession.idToken.payload.email);
-        getData()
-      });
+    
+    async function getSkillsData() {
+      const userData = await getUser()
+      if (userData) {
+          setUser(userData);
+          setUsername(userData.signInUserSession.idToken.payload.email);
+          await getData();
+      }
+    }
+    getSkillsData();
   }, []);
 
   function getUser() {

@@ -13,6 +13,14 @@ export default defineConfig({
   },
   build: {
     outDir: './dist',
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          'aws-amplify': ['aws-amplify'],
+          'data-grid': ['@mui/x-data-grid'],
+        }
+      }
+    }
   },
   resolve: {
     alias: [

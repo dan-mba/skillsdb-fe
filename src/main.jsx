@@ -1,4 +1,4 @@
-import {render} from 'react-dom';
+import {createRoot} from 'react-dom/client';
 import {CssBaseline, ThemeProvider} from '@mui/material';
 import {Amplify} from 'aws-amplify';
 
@@ -8,12 +8,13 @@ import App from './App';
 
 Amplify.configure(config);
 
-render(
+const container = document.getElementById('root');
+const root = createRoot(container);
+root.render(
   <>
     <CssBaseline />
     <ThemeProvider theme={MuiTheme}>
       <App />
     </ThemeProvider>
   </>,
-  document.getElementById('root')
 )
