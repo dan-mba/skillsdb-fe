@@ -6,13 +6,35 @@ import { createHtmlPlugin } from 'vite-plugin-html'
 export default defineConfig({
   plugins: [
     react(),
-    createHtmlPlugin(),
+    createHtmlPlugin({
+      minify: {
+        collapseWhitespace: true,
+        keepClosingSlash: true,
+        removeComments: true,
+        removeRedundantAttributes: true,
+        removeScriptTypeAttributes: true,
+        removeStyleLinkTypeAttributes: true,
+        useShortDoctype: true,
+        minifyCSS: true,
+        minifyJS: {
+          compress: false,
+        },
+      }
+    }),
   ],
   server: {
     port: 8080
   },
   build: {
     outDir: './dist',
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          'aws-amplify': ['aws-amplify'],
+          'data-grid': ['@mui/x-data-grid'],
+        }
+      }
+    }
   },
   resolve: {
     alias: [
