@@ -1,7 +1,9 @@
 import {useEffect, useState} from 'react';
 import {AppBar, Button, Container, Dialog, Toolbar, Typography} from '@mui/material';
 import {styled} from '@mui/material/styles';
-import {Auth, API, Hub} from 'aws-amplify';
+import {Hub} from 'aws-amplify/utils';
+import {fetchAuthSession, signOut, signInWithRedirect} from 'aws-amplify/auth';
+import {get} from 'aws-amplify/api';
 
 import AddDialog from './Components/AddDialog';
 import EditDialog from './Components/EditDialog';
@@ -25,47 +27,64 @@ function App() {
 
   useEffect(() => {
     Hub.listen('auth', ({ payload: { event, data } }) => {
+      console.log('Hub:', event)
       switch (event) {
-        case 'signIn':
-        case 'cognitoHostedUI':
+        case 'signInWithRedirect':
           getUser()
             .then(userData => {
               setUser(userData);
-              setUsername(userData.signInUserSession.idToken.payload.email);
+              setUsername(userData.idToken.payload.email);
             });
             break;
-            case 'signOut':
-              setUser(null);
-              setUsername('');
-              break;
-              case 'signIn_failure':
-                case 'cognitoHostedUI_failure':
-                  console.log('Sign in failure', data);
-                  break;
-                }
-              });
+        case 'signOut':
+          setUser(null);
+          setUsername('');
+          break;
+        case 'signIn_failure':
+        case 'signInWithRedirect_failure':
+          console.log('Sign in failure', data);
+          break;
+        }
+      });
     
     async function getSkillsData() {
       const userData = await getUser()
       if (userData) {
           setUser(userData);
-          setUsername(userData.signInUserSession.idToken.payload.email);
-          await getData();
+          setUsername(userData.idToken.payload.email);
+          await getData(userData);
       }
     }
     getSkillsData();
   }, []);
 
-  function getUser() {
-    return Auth.currentAuthenticatedUser()
-      .then(userData => userData)
-      .catch(() => console.log('Not signed in'));
+  async function getUser() {
+    if (user) return user;
+    try {
+      const {tokens} = await fetchAuthSession()
+      return tokens
+    } catch {
+      console.log('Not signed in');
+    }
   }
 
-  function getData() {
-    API.get('SkillsApi', '')
-      .then(response => setData(mapData(response)))
-      .catch(error => console.log(error));
+  async function getData(userData = user) {
+    try {
+      const getOperation =  get({
+        apiName: 'SkillsApi',
+        path: '/',
+        options: {
+          headers: {
+            Authorization: userData.accessToken.toString()
+          }
+        }
+      })
+      const res = await getOperation.response;
+      const data = await res.body.json();
+      setData(mapData(data))
+    } catch(error) {
+      console.log(error);
+    }
   }
 
   function handleAddClose() {
@@ -100,8 +119,8 @@ function App() {
             {username}
           </Typography>
           {user ?
-            <Button color="inherit" onClick={() => Auth.signOut()}>Sign Out</Button> :
-            <Button color="inherit" onClick={() => Auth.federatedSignIn()}>Sign In</Button>
+            <Button color="inherit" onClick={() => signOut()}>Sign Out</Button> :
+            <Button color="inherit" onClick={() => signInWithRedirect()}>Sign In</Button>
           }
         </StyledToolbar>
       </AppBar>
@@ -113,13 +132,13 @@ function App() {
         {data ? <DataDisplay data={data} edit={handleEditOpen} remove={handleDeleteOpen}/> : null}
       </Container>
       <Dialog open={addOpen} onClose={handleAddClose}>
-        <AddDialog onClose={handleAddClose}/>
+        <AddDialog onClose={handleAddClose} user={user}/>
       </Dialog>
       <Dialog open={Boolean(editOpen)} onClose={handleEditClose}>
-        <EditDialog value={editOpen} onClose={handleEditClose}/>
+        <EditDialog value={editOpen} onClose={handleEditClose} user={user}/>
       </Dialog>
       <Dialog open={Boolean(deleteOpen)} onClose={handleDeleteClose}>
-        <DeleteDialog value={deleteOpen} onClose={handleDeleteClose}/>
+        <DeleteDialog value={deleteOpen} onClose={handleDeleteClose}  user={user}/>
       </Dialog>
     </>
   )

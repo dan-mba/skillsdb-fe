@@ -2,7 +2,7 @@ import {useState} from "react";
 import {DialogActions, DialogContent, DialogTitle, TextField, Button, Rating, Typography, FormControl}
   from "@mui/material";
 import {styled} from "@mui/material/styles";
-import {API} from "aws-amplify";
+import {put} from "aws-amplify/api";
 
 const Content = styled(DialogContent)({
   display: 'flex',
@@ -25,7 +25,7 @@ export default function EditDialog({value, onClose}) {
     if (rating === 0) {
       return;
     }
-    API.put('SkillsApi', '', {
+    put('SkillsApi', '', {
       body: {
         skill,
         oldrating: oldRating,

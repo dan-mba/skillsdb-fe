@@ -1,7 +1,7 @@
 import {DialogActions, DialogContent, DialogContentText, DialogTitle, Button}
   from "@mui/material";
 import {styled} from "@mui/material/styles";
-import {API} from "aws-amplify";
+import {del} from "aws-amplify/api";
 
 const Content = styled(DialogContent)({
   display: 'flex',
@@ -16,7 +16,7 @@ export default function DeleteDialog({value, onClose}) {
   }
 
   function handleSubmit() {
-    API.del('SkillsApi', '', {
+    del('SkillsApi', '', {
       body: {
         skill,
         rating,
