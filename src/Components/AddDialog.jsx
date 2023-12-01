@@ -25,7 +25,7 @@ export default function AddDialog({onClose, user}) {
     try {
       const postOperation =  post({
         apiName: 'SkillsApi',
-        path: '/',
+        path: '',
         options: {
           body: {
             skill,

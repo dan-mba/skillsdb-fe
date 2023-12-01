@@ -72,7 +72,7 @@ function App() {
     try {
       const getOperation =  get({
         apiName: 'SkillsApi',
-        path: '/',
+        path: '',
         options: {
           headers: {
             Authorization: userData.accessToken.toString()
