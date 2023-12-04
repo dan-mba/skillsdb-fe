@@ -8,28 +8,33 @@ const Content = styled(DialogContent)({
   gap: '1rem',
 });
 
-export default function DeleteDialog({value, onClose}) {
+export default function DeleteDialog({value, onClose, user}) {
   let rating, skill = '';
   if(value && value.length > 3) {
     rating = Number(value[0]);
     skill = value.slice(2);
   }
 
-  function handleSubmit() {
-    del('SkillsApi', '', {
-      body: {
-        skill,
-        rating,
-      },
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    })
-      .then((response) => {
-        console.log(response);
-        onClose();
+  async function handleSubmit() {
+    const key = encodeURIComponent(`${rating}#${skill}`);
+    try {
+      const delOperation =  del({
+        apiName: 'SkillsApi',
+        path: `/${key}`,
+        options: {
+          headers: {
+            Authorization: user.accessToken.toString()
+          }
+        }
       })
-      .catch(error => console.log(error));
+      const res = await delOperation.response;
+      const data = await res.body.json();
+
+      console.log(data)
+      onClose();
+    } catch (error) {
+      console.log(error)
+    }
   }
 
   return (

@@ -9,7 +9,7 @@ const Content = styled(DialogContent)({
   gap: '1rem',
 });
 
-export default function EditDialog({value, onClose}) {
+export default function EditDialog({value, onClose, user}) {
   let skill = '';
   let oldRating = 1;
   if (value && value.length > 3) {
@@ -18,28 +18,36 @@ export default function EditDialog({value, onClose}) {
   }
   let [rating, setRating] = useState(oldRating);
 
-  function handleSubmit() {
+  async function handleSubmit() {
     if (rating === oldRating) {
       onClose();
     }
     if (rating === 0) {
       return;
     }
-    put('SkillsApi', '', {
-      body: {
-        skill,
-        oldrating: oldRating,
-        newrating: rating,
-      },
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    })
-      .then((response) => {
-        console.log(response);
-        onClose();
+    try {
+      const putOperation =  put({
+        apiName: 'SkillsApi',
+        path: '',
+        options: {
+          body: {
+            skill,
+            oldrating: oldRating,
+            newrating: rating,
+          },
+          headers: {
+            Authorization: user.accessToken.toString()
+          }
+        }
       })
-      .catch(error => console.log(error));
+      const res = await putOperation.response;
+      const data = await res.body.json();
+
+      console.log(data)
+      onClose();
+    } catch (error) {
+      console.log(error)
+    }
   }
 
   function handleRating(event, newValue) {
