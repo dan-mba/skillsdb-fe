@@ -7,3 +7,10 @@ updates:
     package-ecosystem: 'npm'
     schedule:
       interval: 'monthly'
+    groups:
+      emotion:
+        patterns:
+          - "@emotion*"
+      mui:
+        patterns:
+          - "@mui*"

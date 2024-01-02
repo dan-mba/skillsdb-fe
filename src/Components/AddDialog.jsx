@@ -2,19 +2,19 @@ import {useState} from "react";
 import {DialogActions, DialogContent, DialogTitle, TextField, Button, Rating, Typography, FormControl}
   from "@mui/material";
 import {styled} from "@mui/material/styles";
-import {API} from "aws-amplify";
+import {post} from "aws-amplify/api";
 
 const Content = styled(DialogContent)({
   display: 'flex',
   gap: '1rem',
 });
 
-export default function AddDialog({onClose}) {
+export default function AddDialog({onClose, user}) {
   let [skill, setSkill] = useState('');
   let [rating, setRating] = useState(3);
   let [error, setError] = useState(false);
 
-  function handleSubmit() {
+  async function handleSubmit() {
     if (skill.length === 0) {
       setError(true);
       return;
@@ -22,20 +22,28 @@ export default function AddDialog({onClose}) {
     if (rating === 0) {
       return;
     }
-    API.post('SkillsApi', '', {
-      body: {
-        skill,
-        rating,
-      },
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    })
-      .then((response) => {
-        console.log(response);
-        onClose();
+    try {
+      const postOperation =  post({
+        apiName: 'SkillsApi',
+        path: '',
+        options: {
+          body: {
+            skill,
+            rating,
+          },
+          headers: {
+            Authorization: user.accessToken.toString()
+          }
+        }
       })
-      .catch(error => console.log(error));
+      const res = await postOperation.response;
+      const data = await res.body.json();
+
+      console.log(data)
+      onClose();
+    } catch (error) {
+      console.log(error)
+    }
   }
 
   function handleSkill(event) {
