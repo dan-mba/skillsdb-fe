@@ -9,14 +9,15 @@ const Content = styled(DialogContent)({
 });
 
 export default function DeleteDialog({value, onClose, user}) {
+  console.log(value)
   let rating, skill = '';
-  if(value && value.length > 3) {
+  if(value && value.length >= 3) {
     rating = Number(value[0]);
     skill = value.slice(2);
   }
 
   async function handleSubmit() {
-    const key = encodeURIComponent(`${rating}#${skill}`);
+    const key = `${rating}/${skill}`;
     try {
       const delOperation =  del({
         apiName: 'SkillsApi',
