@@ -24,6 +24,6 @@
     "eslint": "^8.56.0",
     "eslint-plugin-react": "^7.33.2",
     "vite": "^5.0.10",
-    "vite-plugin-html": "^3.2.1"
+    "vite-plugin-html": "^3.2.2"
   }
 }
