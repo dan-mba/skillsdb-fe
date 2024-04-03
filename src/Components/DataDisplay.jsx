@@ -8,7 +8,7 @@ export default function DataDisplay({data, edit, remove}) {
       field: 'icons',
       headerName: '',
       width: 100,
-      valueGetter: ({row: {rating, skill}}) => {
+      valueGetter: (value, {rating, skill}) => {
         return `${rating} ${skill}`;
       },
       renderCell: ({value}) => (
