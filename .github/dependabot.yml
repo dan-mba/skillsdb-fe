@@ -14,3 +14,11 @@ updates:
       mui:
         patterns:
           - "@mui*"
+      react-deps:
+        patterns:
+          - "react*"
+      lint:
+        patterns:
+          - "eslint*"
+          - "@eslint*"
+          - "globals"
