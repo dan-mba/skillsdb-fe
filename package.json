@@ -19,7 +19,7 @@
     "react-dom": "^19.1.0"
   },
   "devDependencies": {
-    "@vitejs/plugin-react": "^4.3.4",
+    "@vitejs/plugin-react": "^4.4.1",
     "eslint": "^9.23.0",
     "eslint-plugin-react": "^7.37.5",
     "globals": "^16.0.0",
