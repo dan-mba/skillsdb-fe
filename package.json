@@ -13,7 +13,7 @@
     "@emotion/styled": "^11.14.1",
     "@mui/icons-material": "^7.3.5",
     "@mui/material": "^7.3.5",
-    "@mui/x-data-grid": "^8.16.0",
+    "@mui/x-data-grid": "^8.20.0",
     "aws-amplify": "^6.15.7",
     "react": "^19.2.0",
     "react-dom": "^19.2.0"
