@@ -16,8 +16,8 @@
     "@mui/material": "^9.0.1",
     "@mui/x-data-grid": "^9.3.0",
     "aws-amplify": "^6.17.0",
-    "react": "^19.2.6",
-    "react-dom": "^19.2.6"
+    "react": "^19.2.7",
+    "react-dom": "^19.2.7"
   },
   "devDependencies": {
     "@eslint/js": "^9.39.4",
