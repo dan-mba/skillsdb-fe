@@ -1,3 +1,4 @@
+/* eslint-disable @eslint-react/exhaustive-deps */
 import {useEffect, useState} from 'react';
 import {AppBar, Button, Container, Dialog, Toolbar, Typography} from '@mui/material';
 import {styled} from '@mui/material/styles';

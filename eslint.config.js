@@ -1,24 +1,32 @@
 import globals from "globals";
-import reactRecommended from "eslint-plugin-react/configs/recommended.js";
-import reactJsx from "eslint-plugin-react/configs/jsx-runtime.js";
-import js from "@eslint/js";
+import eslintJs from "@eslint/js";
+import eslintReact from "@eslint-react/eslint-plugin";
+import { defineConfig, globalIgnores } from "eslint/config";
 
-export default [
-  {
-    ignores: ["dist/**/*"],
-  },
+export default defineConfig(
   {
     files: ["**/*.{js,jsx}"],
-    ...js.configs.recommended,
-    ...reactRecommended,
-    ...reactJsx,
+    extends: [
+      eslintJs.configs.recommended,
+      eslintReact.configs.recommended
+    ],
+
+    // Configure language/parsing options
     languageOptions: {
-      ...reactRecommended.languageOptions,
+      // Include browser global variables (window, document, etc.)
       globals: {
         ...globals.browser,
-      }
+      },
+      parserOptions: {
+        ecmaFeatures: {
+          jsx: true, // Enable JSX syntax support
+        },
+      },
     },
     rules: {
     },
-  }
-];
+  },
+  globalIgnores([
+    "dist/**",
+  ])
+);
